@@ -1,17 +1,25 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+        Estudiante estudiante1 = Estudiante.builder()
+                .nombre("pepe")
+                .legajo("0001")
+                .build();
+        Solicitud solicitud1= Solicitud.builder()
+                .estudiante(estudiante1)
+                .estado(Estado.PENDIENTE)
+                .prioridad("ALTA")
+                .build();
+        System.out.println(solicitud1.toString());
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        TramiteBeca beca = TramiteBeca.builder().build();
+        solicitud1.setTramiteAcademico(beca);
+        System.out.println("==================================");
+        System.out.println(solicitud1.getTramiteAcademico().toString());
+        System.out.println("==================================");
+        System.out.println(solicitud1.getTramiteAcademico().asignar_sector());
+
         }
-    }
 }
