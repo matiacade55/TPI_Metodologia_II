@@ -12,4 +12,7 @@ public class TramiteBeca implements TramiteAcademico{
         return SectorResponsable.ASUNTOS_ESTUDIANTILES;
 
     }
+    public String toString(){
+        return "Beca";
+    }
 }
