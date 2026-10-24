@@ -9,6 +9,7 @@ import lombok.Data;
 public class Solicitud {
     private TramiteAcademico tramiteAcademico;
     private String prioridad;
+    private String descripcion;
     private Estado estado;
     private SectorResponsable responsable;
     private Estudiante estudiante;

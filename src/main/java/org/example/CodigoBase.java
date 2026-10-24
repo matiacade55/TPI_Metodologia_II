@@ -9,6 +9,7 @@ public class CodigoBase {
     // Simulación de base de datos usando una lista de Strings (Obsesión por Primitivos)
     // Formato guardado: "Nombre,Legajo,Tipo,Descripcion,Estado,Responsable"
     static List<String> baseDeDatosSolicitudes = new ArrayList<>();
+    static GestorDeSolicitudes gestor = GestorDeSolicitudes.builder().build();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -32,11 +33,13 @@ public class CodigoBase {
                 String leg = scanner.nextLine();
                 System.out.print("Tipo (Beca, Equivalencia, Examen): ");
                 String tip = scanner.nextLine();
+                TramiteAcademico Tramite = gestor.registrarTramite(tip);
                 System.out.print("Descripcion: ");
                 String desc = scanner.nextLine();
 
                 // Llamada con demasiados parámetros
-                registrarSolicitud(nom, leg, tip, desc, "Pendiente", "Sin asignar");
+                //registrarSolicitud(nom, leg, tip, desc);
+                gestor.registrarSolicitud(nom,leg,Tramite,desc,Estado.PENDIENTE,SectorResponsable.ASUNTOS_ESTUDIANTILES);
 
             } else if (opcion == 2) {
                 procesarYAsignarResponsable();
