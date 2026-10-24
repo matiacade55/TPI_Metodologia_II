@@ -21,6 +21,8 @@ public class GestorDeSolicitudes {
         }
     }
 
+
+    
     public void registrarSolicitud(String nombreEstudiante, String legajoEstudiante, TramiteAcademico tipoTramite, String descripcion,Estado estado , SectorResponsable sectorResponsable){
       Estudiante estudiante = Estudiante.builder()
               .nombre(nombreEstudiante)
