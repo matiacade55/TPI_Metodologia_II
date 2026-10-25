@@ -19,10 +19,10 @@ public class Main {
             System.out.println("4. Listar reporte básico");
             System.out.println("5. Salir");
 
-            opcion = leerEntero("Elegi una opcion: ",0,5,scanner);
+            opcion = leerEntero("Elegi una opcion: ",scanner);
 
             if (opcion == 1) {
-                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",scanner);
                 String nombre = leerTexto("Nombre del estudiante: ",scanner);
                 String legajo = leerTexto("Legajo: ",scanner);
                 String tipoTramite = leerTexto("Tipo (Beca, Equivalencia, Examen): ",scanner).toLowerCase();
@@ -53,7 +53,7 @@ public class Main {
 
             } else if (opcion == 2) {
 
-                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",scanner);
                 SectorResponsable[] opciones = SectorResponsable.values();
                 SectorResponsable sectorElegido = seleccionarOpcionEnum("Indique el Sector responsable",opciones,scanner); //Metodo seleccion de Enums.
                 System.out.println("El sector elegido es: "+ sectorElegido);
@@ -65,7 +65,7 @@ public class Main {
 
             } else if (opcion == 3) {
 
-                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",scanner);
                 Estado[] opciones = Estado.values();
                 Estado estadoElegido = seleccionarOpcionEnum("Elija el Estado a seleccionar.",opciones,scanner); //Metodo seleccion de Enums.
                 System.out.println("El estado elegido es: "+ estadoElegido);
@@ -93,19 +93,23 @@ public class Main {
         return opciones[eleccion - 1];
     }
     // Validar y leer un número entero dentro de un rango.
-    public static int leerEntero(String mensaje, int min, int max,Scanner scanner) {
+    public static int leerEntero(String mensaje,Scanner scanner) {
         while (true) {
             try {
                 System.out.print(mensaje);
-                int numero = scanner.nextInt();
-                scanner.nextLine();
+                String entrada = scanner.nextLine();
+                if(entrada.trim().isEmpty()){
+                    System.out.println("Error El campo no puede estar vacio. Volve a intentar.\n");
+                    continue;
+                }
+                int numero = Integer.parseInt(entrada.trim());
 
-                if (numero >= min && numero <= max) {
+                if (numero >= 0) {
                     return numero;
                 }
-                System.out.println("Error: La opcion tiene que estar entre " + min + " y " + max + ".\n");
+                System.out.println("Error: La opcion tiene que ser un numero positivo.\n");
 
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Error: Debe ingresar un numero válido (no letras ni simbolos).\n");
                 scanner.nextLine();
             }
