@@ -7,36 +7,24 @@ import lombok.Data;
 @Builder
 public class GestorDeSolicitudes {
     @Builder.Default
-    RepositorioEnMemoria BaseDeDatos = RepositorioEnMemoria.builder().build();
+    RepositorioSolicitudes baseDeDatos = RepositorioEnMemoria.builder().build();
 
-    public TramiteAcademico registrarTramite(String tramite){
-        if (tramite.equals("Beca")){
-            return TramiteBeca.builder().build();
-        } else if (tramite.equals("Equivalencia")) {
-            return TramiteEquivalencia.builder().build();
-        } else if (tramite.equals("Examen")) {
-            return TramiteExamen.builder().build();
-        }else{
-            return TramiteGeneral.builder().build();
-        }
+    public void registrarSolicitud (Solicitud solicitud){
+        baseDeDatos.guardar(solicitud);
+    }
+    public void cambiarResponsable(Long id, SectorResponsable responsable){
+        Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
+        solicitudEncontrada.setResponsable(responsable);
     }
 
+    public void cambiarEstado(Long id, Estado estado){
+        Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
+        solicitudEncontrada.setEstado(estado);
+    }
 
-    
-    public void registrarSolicitud(String nombreEstudiante, String legajoEstudiante, TramiteAcademico tipoTramite, String descripcion,Estado estado , SectorResponsable sectorResponsable){
-      Estudiante estudiante = Estudiante.builder()
-              .nombre(nombreEstudiante)
-              .legajo(legajoEstudiante)
-              .build();
-      Solicitud solicitud = Solicitud.builder()
-              .tramiteAcademico(tipoTramite)
-              .descripcion(descripcion)
-              .estado(estado)
-              .responsable(sectorResponsable)
-              .estudiante(estudiante)
-              .build();
-
-      BaseDeDatos.guardar(solicitud);
+    public void generarReporte() {
+        System.out.println("\n--- Reporte de Solicitudes ---");
+        baseDeDatos.listar();
     }
 
 }
