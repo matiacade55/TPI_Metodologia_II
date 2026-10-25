@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -17,22 +18,21 @@ public class Main {
             System.out.println("3. Cambiar estado de una solicitud");
             System.out.println("4. Listar reporte básico");
             System.out.println("5. Salir");
-            System.out.print("Elija opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar el buffer
+
+            opcion = leerEntero("Elegi una opcion: ",0,5,scanner);
 
             if (opcion == 1) {
-                System.out.println("Ingrese id de la solicitud: ");
-                Long id = Long.parseLong(scanner.nextLine());
-                System.out.print("Nombre del estudiante: ");
-                String nombre = scanner.nextLine();
-                System.out.print("Legajo: ");
-                String legajo = scanner.nextLine();
-                System.out.print("Tipo (Beca, Equivalencia, Examen): ");
-                String tipoTramite = scanner.nextLine();
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
+                String nombre = leerTexto("Nombre del estudiante: ",scanner);
+                String legajo = leerTexto("Legajo: ",scanner);
+                String tipoTramite = leerTexto("Tipo (Beca, Equivalencia, Examen): ",scanner).toLowerCase();
                 TramiteAcademico Tramite = TramiteFactory.CrearTramite(tipoTramite);
-                System.out.println("Prioridad (Alta, Baja)");
-                String prioridad = scanner.nextLine();
+                String prioridad;
+                do {
+                     prioridad = leerTexto("Selecciona la prioridad (alta, baja)",scanner).toLowerCase();
+
+                }while (!prioridad.equals("alta") && !prioridad.equals("baja") );
+
 
                 // instanciando los objetos Estudiante y solicitud en el menu.
                 Estudiante estudiante = Estudiante.builder()
@@ -51,25 +51,23 @@ public class Main {
                 gestor.registrarSolicitud(solicitud);
 
             } else if (opcion == 2) {
-                //Seleccion de id de la solicitud a modificar.
-                System.out.println("Indique el id de la solicitud a modificar");
-                Long id = scanner.nextLong();
-                //Seleccion del Enum de sector responsable.
-                String mensaje ="Indique el Sector responsable";
+
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
                 SectorResponsable[] opciones = SectorResponsable.values();
-                SectorResponsable sectorElegido = seleccionarOpcionEnum(mensaje,opciones,scanner); //Metodo seleccion de Enums.
+                SectorResponsable sectorElegido = seleccionarOpcionEnum("Indique el Sector responsable",opciones,scanner); //Metodo seleccion de Enums.
                 System.out.println("El sector elegido es: "+ sectorElegido);
 
-                gestor.cambiarResponsable(id,sectorElegido); //Metodo cambiarResponsable de las Solicitudes.
+                try{
+                    gestor.cambiarResponsable(id,sectorElegido); //Metodo cambiarResponsable de las Solicitudes.
+                }catch (RuntimeException e){
+                    System.out.println("ERROR en la operacion " + e.getMessage());}
+
 
             } else if (opcion == 3) {
-                //Seleccion de id de la solicitud a modificar.
-                System.out.println("Indique el id de la solicitud a modificar");
-                Long id = scanner.nextLong();
-                //Seleccion del Enum de Estado.
-                String mensaje = "Elija el Estado a seleccionar.";
+
+                Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
                 Estado[] opciones = Estado.values();
-                Estado estadoElegido = seleccionarOpcionEnum(mensaje,opciones,scanner); //Metodo seleccion de Enums.
+                Estado estadoElegido = seleccionarOpcionEnum("Elija el Estado a seleccionar.",opciones,scanner); //Metodo seleccion de Enums.
                 System.out.println("El estado elegido es: "+ estadoElegido);
 
                 gestor.cambiarEstado(id,estadoElegido); //Metodo cambiarResponsable de las Solicitudes.
@@ -78,7 +76,7 @@ public class Main {
             }
         }
     }
-    // El <T extends Enum<T>> le dice a Java: "Este método acepta cualquier clase que sea un Enum"
+    // El <T extends Enum<T>> le dice a Java: "Este metodo acepta cualquier clase que sea un Enum"
     public static <T extends Enum<T>> T seleccionarOpcionEnum(String mensaje, T[] opciones, Scanner scanner) {
         System.out.println(mensaje);
         for (int i = 0; i < opciones.length; i++) {
@@ -89,6 +87,38 @@ public class Main {
         scanner.nextLine(); // Limpiar el buffer para evitar saltos de línea inesperados
 
         return opciones[eleccion - 1];
+    }
+    // Validar y leer un número entero dentro de un rango.
+    public static int leerEntero(String mensaje, int min, int max,Scanner scanner) {
+        while (true) {
+            try {
+                System.out.print(mensaje);
+                int numero = scanner.nextInt();
+                scanner.nextLine();
+
+                if (numero >= min && numero <= max) {
+                    return numero;
+                }
+                System.out.println("Error: La opcion tiene que estar entre " + min + " y " + max + ".\n");
+
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debe ingresar un numero válido (no letras ni simbolos).\n");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    // Validar y leer un texto que no estE vacío
+    public static String leerTexto(String mensaje,Scanner scanner) {
+        while (true) {
+            System.out.print(mensaje);
+            String texto = scanner.nextLine().trim();
+
+            if (!texto.isBlank()) {
+                return texto; // ¡Válido! Lo devuelve
+            }
+            System.out.println("Error: Este campo no puede estar vacío.\n");
+        }
     }
 
 }

@@ -15,10 +15,15 @@ public class RepositorioEnMemoria implements RepositorioSolicitudes{
 
     @Override
     public void guardar(Solicitud solicitud) {
-        this.listaSolicitudes.add(solicitud);
-        System.out.println("Solicitud guardada.");
-        System.out.println("LAS SOLICITUDES ACTUALES SON: ");
-        listar();
+        try{
+            this.listaSolicitudes.add(solicitud);
+            System.out.println("Solicitud guardada.");
+            System.out.println("LAS SOLICITUDES ACTUALES SON: ");
+            listar();
+        }catch (NullPointerException e){
+            System.out.println("No se encontro una solicitud para guardar.");
+        }
+
     }
     public Solicitud buscarPorId(Long id){
         Optional<Solicitud> solicitudEncontrada = listaSolicitudes.stream()
@@ -30,8 +35,12 @@ public class RepositorioEnMemoria implements RepositorioSolicitudes{
 
     @Override
     public void listar() {
-        for (Solicitud solicitud: listaSolicitudes){
-            System.out.println(solicitud.toString());
+        if (listaSolicitudes.isEmpty()){
+            System.out.println("La base de datos de solicitudes esta vacia.");
+        }else{
+            for (Solicitud solicitud: listaSolicitudes){
+                System.out.println(solicitud.toString());
+            }
         }
     }
 }

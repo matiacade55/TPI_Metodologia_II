@@ -12,14 +12,26 @@ public class GestorDeSolicitudes {
     public void registrarSolicitud (Solicitud solicitud){
         baseDeDatos.guardar(solicitud);
     }
+
     public void cambiarResponsable(Long id, SectorResponsable responsable){
-        Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
-        solicitudEncontrada.setResponsable(responsable);
+        if(responsable != null){
+            Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
+            if(solicitudEncontrada.getEstado() == Estado.APROBADO || solicitudEncontrada.getEstado() == Estado.RECHAZADO){
+                throw new RuntimeException("No se puede cambiar el Responsable de una solicitud APROBADA o RECHAZADA");
+            }
+            solicitudEncontrada.setResponsable(responsable);
+        }else{
+            throw new IllegalArgumentException("El responsable no puede ser nulo.");
+        }
     }
 
     public void cambiarEstado(Long id, Estado estado){
-        Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
-        solicitudEncontrada.setEstado(estado);
+        if(estado != null){
+            Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);
+            solicitudEncontrada.setEstado(estado);
+        }else{
+            throw new IllegalArgumentException("El estado no puede ser nulo.");
+        }
     }
 
     public void generarReporte() {
