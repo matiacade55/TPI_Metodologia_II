@@ -51,39 +51,44 @@ public class Main {
                 gestor.registrarSolicitud(solicitud);
 
             } else if (opcion == 2) {
+                //Seleccion de id de la solicitud a modificar.
                 System.out.println("Indique el id de la solicitud a modificar");
                 Long id = scanner.nextLong();
-
+                //Seleccion del Enum de sector responsable.
+                String mensaje ="Indique el Sector responsable";
                 SectorResponsable[] opciones = SectorResponsable.values();
-                System.out.println("Elija el sector responsable.");
-                for(int i = 0; i< opciones.length; i++){
-                    System.out.println((i + 1) + " . " + opciones[i]);
-                }
-                int eleccion = scanner.nextInt();
-                SectorResponsable sectorElegido = opciones[eleccion-1];
-                System.out.println("SE ELIGIO "+sectorElegido);
+                SectorResponsable sectorElegido = seleccionarOpcionEnum(mensaje,opciones,scanner); //Metodo seleccion de Enums.
+                System.out.println("El sector elegido es: "+ sectorElegido);
 
-
-                gestor.cambiarResponsable(id,sectorElegido);
+                gestor.cambiarResponsable(id,sectorElegido); //Metodo cambiarResponsable de las Solicitudes.
 
             } else if (opcion == 3) {
+                //Seleccion de id de la solicitud a modificar.
                 System.out.println("Indique el id de la solicitud a modificar");
                 Long id = scanner.nextLong();
-
+                //Seleccion del Enum de Estado.
+                String mensaje = "Elija el Estado a seleccionar.";
                 Estado[] opciones = Estado.values();
-                System.out.println("Elija el Estado a seleccionar.");
-                for(int i = 0; i< opciones.length; i++){
-                    System.out.println((i + 1) + " . " + opciones[i]);
-                }
-                int eleccion = scanner.nextInt();
-                Estado estadoElegido = opciones[eleccion-1];
-                System.out.println("SE ELIGIO "+ estadoElegido);
+                Estado estadoElegido = seleccionarOpcionEnum(mensaje,opciones,scanner); //Metodo seleccion de Enums.
+                System.out.println("El estado elegido es: "+ estadoElegido);
 
-                gestor.cambiarEstado(id,estadoElegido);
+                gestor.cambiarEstado(id,estadoElegido); //Metodo cambiarResponsable de las Solicitudes.
             } else if (opcion == 4) {
                 gestor.generarReporte();
             }
         }
+    }
+    // El <T extends Enum<T>> le dice a Java: "Este método acepta cualquier clase que sea un Enum"
+    public static <T extends Enum<T>> T seleccionarOpcionEnum(String mensaje, T[] opciones, Scanner scanner) {
+        System.out.println(mensaje);
+        for (int i = 0; i < opciones.length; i++) {
+            System.out.println((i + 1) + ". " + opciones[i]);
+        }
+        System.out.print("Elección: ");
+        int eleccion = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer para evitar saltos de línea inesperados
+
+        return opciones[eleccion - 1];
     }
 
 }
