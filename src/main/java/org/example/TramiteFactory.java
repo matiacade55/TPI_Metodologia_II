@@ -1,7 +1,7 @@
 package org.example;
 
 public class TramiteFactory {
-    public static TramiteAcademico CrearTramite(String tipo){
+    public static TramiteAcademico crearTramite(String tipo){
         if (tipo.equals("beca")){
             return TramiteBeca.builder().build();
         } else if (tipo.equals("equivalencia")) {

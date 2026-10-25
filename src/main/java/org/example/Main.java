@@ -26,7 +26,7 @@ public class Main {
                 String nombre = leerTexto("Nombre del estudiante: ",scanner);
                 String legajo = leerTexto("Legajo: ",scanner);
                 String tipoTramite = leerTexto("Tipo (Beca, Equivalencia, Examen): ",scanner).toLowerCase();
-                TramiteAcademico Tramite = TramiteFactory.CrearTramite(tipoTramite);
+                TramiteAcademico tramite = TramiteFactory.crearTramite(tipoTramite);
                 String prioridad;
                 do {
                      prioridad = leerTexto("Selecciona la prioridad (alta, baja)",scanner).toLowerCase();
@@ -42,13 +42,14 @@ public class Main {
                 Solicitud solicitud = Solicitud.builder()
                         .id(id)
                         .estudiante(estudiante)
-                        .tramiteAcademico(Tramite)
+                        .tramiteAcademico(tramite)
                         .prioridad(prioridad)
                         .estado(Estado.PENDIENTE)
-                        .responsable(Tramite.asignar_sector())
+                        .responsable(tramite.asignar_sector())
                         .build();
                 // llamada al gestor para guardar la solicitud en la base de datos.
                 gestor.registrarSolicitud(solicitud);
+                System.out.println("Solicitud registrada con exito.");
 
             } else if (opcion == 2) {
 
@@ -62,7 +63,6 @@ public class Main {
                 }catch (RuntimeException e){
                     System.out.println("ERROR en la operacion " + e.getMessage());}
 
-
             } else if (opcion == 3) {
 
                 Long id = (long) leerEntero("Ingrese id de la solicitud: ",0,999,scanner);
@@ -70,7 +70,11 @@ public class Main {
                 Estado estadoElegido = seleccionarOpcionEnum("Elija el Estado a seleccionar.",opciones,scanner); //Metodo seleccion de Enums.
                 System.out.println("El estado elegido es: "+ estadoElegido);
 
-                gestor.cambiarEstado(id,estadoElegido); //Metodo cambiarResponsable de las Solicitudes.
+                try{
+                    gestor.cambiarEstado(id,estadoElegido); //Metodo cambiarResponsable de las Solicitudes.
+                }catch (RuntimeException e){
+                    System.out.println("ERROR en la operacion " + e.getMessage());}
+
             } else if (opcion == 4) {
                 gestor.generarReporte();
             }

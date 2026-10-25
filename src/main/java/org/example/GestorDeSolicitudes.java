@@ -2,6 +2,8 @@ package org.example;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Data
 @Builder
@@ -36,7 +38,13 @@ public class GestorDeSolicitudes {
 
     public void generarReporte() {
         System.out.println("\n--- Reporte de Solicitudes ---");
-        baseDeDatos.listar();
+        List<Solicitud> listado =baseDeDatos.listar();
+        if (listado.isEmpty()){
+        }else{
+        for (Solicitud solicitud: listado){
+            System.out.println(solicitud.toString());
+        }
+    }
     }
 
 }
