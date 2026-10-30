@@ -15,6 +15,10 @@ public class GestorDeSolicitudes {
         baseDeDatos.guardar(solicitud);
     }
 
+    public void verificarExistencia(Long id) {
+        baseDeDatos.buscarPorId(id);
+    }
+
     public void cambiarResponsable(Long id, SectorResponsable responsable){
         if(responsable != null){
             Solicitud solicitudEncontrada = baseDeDatos.buscarPorId(id);

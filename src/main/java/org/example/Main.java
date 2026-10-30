@@ -52,29 +52,30 @@ public class Main {
                 System.out.println("Solicitud registrada con exito.");
 
             } else if (opcion == 2) {
-
                 Long id = (long) leerEntero("Ingrese id de la solicitud: ",scanner);
-                SectorResponsable[] opciones = SectorResponsable.values();
-                SectorResponsable sectorElegido = seleccionarOpcionEnum("Indique el Sector responsable",opciones,scanner); //Metodo seleccion de Enums.
-                System.out.println("El sector elegido es: "+ sectorElegido);
 
                 try{
+                    gestor.verificarExistencia(id);
+                    SectorResponsable[] opciones = SectorResponsable.values();
+                    SectorResponsable sectorElegido = seleccionarOpcionEnum("Indique el Sector responsable",opciones,scanner); //Metodo seleccion de Enums.
+                    System.out.println("El sector elegido es: "+ sectorElegido);
                     gestor.cambiarResponsable(id,sectorElegido); //Metodo cambiarResponsable de las Solicitudes.
                 }catch (RuntimeException e){
                     System.out.println("ERROR en la operacion " + e.getMessage());}
 
             } else if (opcion == 3) {
+            Long id = (long) leerEntero("Ingrese id de la solicitud: ", scanner);
 
-                Long id = (long) leerEntero("Ingrese id de la solicitud: ",scanner);
+            try {
+                gestor.verificarExistencia(id);
                 Estado[] opciones = Estado.values();
-                Estado estadoElegido = seleccionarOpcionEnum("Elija el Estado a seleccionar.",opciones,scanner); //Metodo seleccion de Enums.
-                System.out.println("El estado elegido es: "+ estadoElegido);
-
-                try{
-                    gestor.cambiarEstado(id,estadoElegido); //Metodo cambiarResponsable de las Solicitudes.
-                }catch (RuntimeException e){
-                    System.out.println("ERROR en la operacion " + e.getMessage());}
-
+                Estado estadoElegido = seleccionarOpcionEnum("Elija el Estado a seleccionar.", opciones, scanner);
+                System.out.println("El estado elegido es: " + estadoElegido);
+                gestor.cambiarEstado(id, estadoElegido);
+                System.out.println("Estado actualizado exitosamente.");
+            } catch (RuntimeException e) {
+                System.out.println("ERROR en la operacion: " + e.getMessage());
+            }
             } else if (opcion == 4) {
                 gestor.generarReporte();
             }
@@ -86,7 +87,7 @@ public class Main {
         for (int i = 0; i < opciones.length; i++) {
             System.out.println((i + 1) + ". " + opciones[i]);
         }
-        System.out.print("Elección: ");
+        System.out.print("Seleccione el numero con el estado elegido: ");
         int eleccion = scanner.nextInt();
         scanner.nextLine(); // Limpiar el buffer para evitar saltos de línea inesperados
 
